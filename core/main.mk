@@ -365,24 +365,17 @@ endif
 ## user/userdebug ##
 
 user_variant := $(filter user userdebug,$(TARGET_BUILD_VARIANT))
-enable_target_debugging := true
+enable_target_debugging := false
 tags_to_install :=
 ifneq (,$(user_variant))
   # Target is secure in user builds.
   ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=1
   ADDITIONAL_DEFAULT_PROPERTIES += security.perf_harden=1
 
-  ifeq ($(user_variant),user)
-    ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
-  endif
+  ADDITIONAL_DEFAULT_PROPERTIES += ro.adb.secure=1
 
-  ifeq ($(user_variant),userdebug)
-    # Pick up some extra useful tools
-    tags_to_install += debug
-  else
-    # Disable debugging in plain user builds.
-    enable_target_debugging :=
-  endif
+  # Disable debugging in plain user builds.
+  enable_target_debugging :=
 
   # Disallow mock locations by default for user builds
   ADDITIONAL_DEFAULT_PROPERTIES += ro.allow.mock.location=0
